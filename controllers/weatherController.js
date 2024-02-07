@@ -9,11 +9,6 @@ module.exports.getLiveData = async (req, res) => {
     if (!lat || !lng)
       return res.status(400).json({ message: "Lat and Lng required" });
 
-    /*
-      https://api.openweathermap.org/data/2.5/weather?lat=22.572645&lon=88.363892&appid=ffd2f88a623ef8dcc5b13c926ed82099
-      
-      */
-
     const options = {
       method: "GET",
       url: `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPEN_WEATHER_API_KEY}`,
@@ -41,7 +36,9 @@ module.exports.getHistory = async (req, res) => {
 
     const response = await axios.request(options);
 
-    let weather = await Weather.findOne({ name: response.data.name });
+    let weather = await Weather.findOne({
+      name: response.data.name === "" ? "Default" : response.data.name,
+    });
 
     const date = Date.now();
     let startDate = helper.parseDate(new Date(date - 1000 * 6 * 24 * 60 * 60));
@@ -55,7 +52,7 @@ module.exports.getHistory = async (req, res) => {
     // checking if  there is already a record for this city in our database
     if (!weather) {
       weather = await Weather.create({
-        name: response.data.name,
+        name: response.data.name === "" ? "Default" : response.data.name,
       });
     }
 
