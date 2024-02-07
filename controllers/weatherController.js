@@ -9,13 +9,14 @@ module.exports.getLiveData = async (req, res) => {
     if (!lat || !lng)
       return res.status(400).json({ message: "Lat and Lng required" });
 
+    /*
+      https://api.openweathermap.org/data/2.5/weather?lat=22.572645&lon=88.363892&appid=ffd2f88a623ef8dcc5b13c926ed82099
+      
+      */
+
     const options = {
       method: "GET",
-      url: `https://open-weather13.p.rapidapi.com/city/latlon/${lat}/${lng}`,
-      headers: {
-        "X-RapidAPI-Key": process.env.OPEN_WEATHER_API_KEY,
-        "X-RapidAPI-Host": "open-weather13.p.rapidapi.com",
-      },
+      url: `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPEN_WEATHER_API_KEY}`,
     };
 
     const response = await axios.request(options);
@@ -33,13 +34,9 @@ module.exports.getHistory = async (req, res) => {
     if (!lat || !lng)
       return res.status(400).json({ message: "Lat and Lng required" });
 
-    let options = {
+    const options = {
       method: "GET",
-      url: `https://open-weather13.p.rapidapi.com/city/latlon/${lat}/${lng}`,
-      headers: {
-        "X-RapidAPI-Key": process.env.OPEN_WEATHER_API_KEY,
-        "X-RapidAPI-Host": "open-weather13.p.rapidapi.com",
-      },
+      url: `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPEN_WEATHER_API_KEY}`,
     };
 
     const response = await axios.request(options);
